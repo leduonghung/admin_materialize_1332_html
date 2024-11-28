@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('ip',20)->nullable()->nullable();
             $table->integer('userCreated')->nullable();
             $table->integer('userUpdated')->nullable();
+            $table->boolean('is_admin')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,9 +1,7 @@
 <!doctype html>
 
-<html lang="{{ config('app.locale', 'en') }}" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default" data-assets-path="{{ asset('backend') }}/" data-template="horizontal-menu-template-starter" data-style="light">
-<head>
+<html lang="{{ config('app.locale', 'en') }}" class="light-style layout-menu-fixed layout-wide" dir="ltr" data-theme="theme-default" data-assets-path="{{ asset('backend') }}/" data-template="horizontal-menu-template-starter" data-style="light">
   @include('admin.layouts.components.head')
-</head>
 
   <body>
     <!-- Layout wrapper -->
