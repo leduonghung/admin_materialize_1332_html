@@ -7,9 +7,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
         rel="stylesheet" />
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('backend/vendor/fonts/remixicon/remixicon.css') }}" />
-    <!-- <link rel="stylesheet" href="{{ asset('backend/vendor/fonts/flag-icons.css') }}" /> -->
+     <link rel="stylesheet" href="{{ asset('backend/vendor/fonts/flag-icons.css') }}" /> 
 
     <!-- Menu waves for no-customizer fix -->
     <link rel="stylesheet" href="{{ asset('backend/vendor/libs/node-waves/node-waves.css') }}" />

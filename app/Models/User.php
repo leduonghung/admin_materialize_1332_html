@@ -3,24 +3,24 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
+use App\Traits\QueryScopes;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Jetstream\HasProfilePhoto;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use HasApiTokens;
-
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory;
+    use HasFactory,SoftDeletes;
     use HasProfilePhoto;
-    use HasTeams;
     use Notifiable;
-    use TwoFactorAuthenticatable;
+    use TwoFactorAuthenticatable,QueryScopes;
+    protected $softDelete = true;
 
     /**
      * The attributes that are mass assignable.
@@ -30,7 +30,20 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'profile_photo_path',
         'password',
+        'phone',
+        'province_id',
+        'district_id',
+        'ward_id',
+        'address',
+        'birthday',
+        'description',
+        'user_agent',
+        'ip',
+        'image',
+        'publish',
+        'userCreated',
     ];
 
     /**
@@ -66,4 +79,33 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isActive()
+    {
+        return ($this->publish) ? 'Kích hoạt' : ' &nbsp; Ẩn &nbsp; ';
+    }
+
+    // public function roles() {
+    //     return $this->belongsToMany(Role::class, 'role_users','user_id', 'role_id')
+
+    //     ->select(['roles.id', 'roles.name', 'roles.publish'])->withTimestamps();
+    // }
+
+    // public function checkPermissionAccess($permissionCheck) : bool {
+    //     $roles = auth()->user()->roles;
+    //     $roles->contains(function ($role) {
+    //         if(in_array(strtolower($role->name),['admin','developer'])) return true;
+    //         // dd($value);
+    //     });
+
+    //     // dd($roles);
+    //     foreach ($roles as $role) {
+    //         $permissions = $role->permissions;
+    //         // dd($permissions->toArray());
+    //         if($permissions->contains('key_code', $permissionCheck)){
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 }
