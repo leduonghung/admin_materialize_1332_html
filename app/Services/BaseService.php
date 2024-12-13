@@ -16,29 +16,29 @@ class BaseService implements BaseServiceInterface
         // $this->languageRepository = $languageRepository;
     }
 
-    public function currentLanguage()
-    {
-        $languageRepository = new LanguageRepository();
-        $languageData = $languageRepository->findWhere(['current'=>1],['id','name','current']);
-        if(!$languageData){
-            $flag = \App::getLocale();
-            $languageDataFlag = $languageRepository->findWhere(['flag'=>$flag],['id','name','current']);
-            if ($languageDataFlag) {
-                return $languageDataFlag->id;
-            }
+    // public function currentLanguage()
+    // {
+    //     $languageRepository = new LanguageRepository();
+    //     $languageData = $languageRepository->findWhere(['current'=>1],['id','name','current']);
+    //     if(!$languageData){
+    //         $flag = \App::getLocale();
+    //         $languageDataFlag = $languageRepository->findWhere(['flag'=>$flag],['id','name','current']);
+    //         if ($languageDataFlag) {
+    //             return $languageDataFlag->id;
+    //         }
 
-        }else{
-            return $languageData->id;
-        }
-        return 1;
-    }
+    //     }else{
+    //         return $languageData->id;
+    //     }
+    //     return 1;
+    // }
 
-    public function nestedset()
-    {
-        $this->nestedset->Get('level ASC, order ASC');
-        $this->nestedset->Recursive(0, $this->nestedset->Set());
-        $this->nestedset->Action();
-    }
+    // public function nestedset()
+    // {
+    //     $this->nestedset->Get('level ASC, order ASC');
+    //     $this->nestedset->Recursive(0, $this->nestedset->Set());
+    //     $this->nestedset->Action();
+    // }
 
     public function formatRouterPayload($model_id,$canonical, $controllerName){
         return [

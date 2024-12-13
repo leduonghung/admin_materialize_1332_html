@@ -7,6 +7,7 @@ use App\Models\Domain;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Log;
 use App\Services\Interfaces\DomainServiceInterface as DomainService;
 use App\Repositories\Interfaces\DomainRepositoryInterface as DomainRepository;
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
@@ -28,12 +29,9 @@ class DomainController extends Controller
     public function index(Request $request)
     {
         try {
-            $colums = ["domains.id","domains.name","tb2.name as language_name", "domains.publish", "domain_extension_id","language_id", "place_registration", "expiry_date", "content", "status","created_at"];
+            $colums = ["domains.id","domains.name","tb2.name as language_name", "domains.publish", "domain_extension_id","language_id", "place_registration", "expiry_date", "content", "status"];
             $conditions =[];
-        
-            // if ($request->has('domain_extension_id') && !empty($request->domain_extension_id)) {
-            //     $conditions['whereIn'] = ['domain_extension_id',$request->domain_extension_id];
-            // }
+
             $status = $request->status === null ? false : explode( ',', $request->status);
             // $conditions = [['deleted_at','==',null]];
             if($status !== false){
@@ -51,34 +49,19 @@ class DomainController extends Controller
             if($language_id !== false){
                 $conditions['whereIn']['language_id'] = $language_id;
             }
-        //    dd($conditions);
             $join = [
                 ['languages as tb2','tb2.id','=','domains.language_id'],
                 // ['post_catalogues as tb3','tb3.id','=','posts.post_catalogue_id']
             ];
 
-            // if(!empty($relations)){
-            //     foreach ($relations as $value) {
-            //         $query->with($value);
-            //     }
-            // }
-            // if(count($orderBy)){
-            //     foreach ($orderBy as $val) {
-            //         $query->orderBy($val[0],$val[1]);
-            //     }
-            // }
-
             // dd($conditions);
             $data = __('messages.domain');
             $data['conditions'] = !empty($conditions) && array_key_exists('whereIn',$conditions) ? $conditions['whereIn'] : false;
-            $data['domains'] = $this->domainRepository->findMyCondition($colums,$conditions,[],$join,[['order','DESC']],true);
+            $data['domains'] = $this->domainRepository->findMyCondition($colums,$conditions,[],$join,[['domains.order','DESC']],true);
             $data['languages'] = $this->languageRepository->getAll(['id','code','name']);
             $data['domainExtensions'] = $this->domainExtensionRepository->getAll(['id','name']);
             $data['action'] = 'admin.domain';
             // dd($data['domains']);
-// dd($data['languages']->toArray());
-            // $data['DomainExtensions'] = $this->DomainService->paginate($request);
-            
             return view('admin.domain.index', compact('data'));//->with(['code'=>'success','title'=>'asdada','content'=>'Thêm bản ghi thành công !']);
         } catch (\Exception $e) {
             throw $e;
@@ -114,7 +97,7 @@ class DomainController extends Controller
             ], 201);
         } catch (\Exception $e) {
             dd($e);
-            \Log::error('Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
+            // Log::error('Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
             return abort(403, 'Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
         }
     }
@@ -133,8 +116,9 @@ class DomainController extends Controller
     public function edit($id)
     {
         try {
+            $data['type'] = 'domain';
             $colums = ['id','name','language_id','domain_extension_id','date_of_registration','year_of_extended','place_registration','order','content','status','publish'];
-            if($data = $this->domainService->findWhere([['id','=',$id]],$colums)){
+            if($data['data'] = $this->domainService->findWhere([['id','=',$id]],$colums)){
 // dd($data);
                 return response()->json([
                     'data'=>$data,
@@ -147,7 +131,7 @@ class DomainController extends Controller
             ], 201);
         } catch (\Exception $e) {
             dd($e);
-            \Log::error('Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
+            // \Log::error('Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
             return abort(403, 'Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
         }
     }
@@ -167,7 +151,8 @@ class DomainController extends Controller
             return response()->view('admin.domain.update', ['error'=>'Chỉnh sửa không thành công !'], 201)->header('Content-Type', 'html');
 
         } catch (\Exception $e) {
-            Log::error('Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
+            dd($e);
+            // Log::error('Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
             return abort(403, 'Message : ' . $e->getMessage() . 'Line  : ' . $e->getLine());
         }
     }

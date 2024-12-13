@@ -1,5 +1,5 @@
 function editItem(e,id) {
-    let beforeAction = $('#form_domain').attr("action");
+    let formId = e.getAttribute("data-form"), elModal = e.getAttribute("data-modal"), beforeAction = $(formId).attr("action");
     $.ajax({
         url: e.getAttribute("data-url"),
         type: "POST",
@@ -11,32 +11,47 @@ function editItem(e,id) {
         //     _token: _token,
         // },
         beforeSend: function() {
-            $('#form_domain').attr('action',e.getAttribute("data-action"))
+            $(formId).attr('action',e.getAttribute("data-action"))
             // currentLink.html('loading...')
         },
         success: function (data) {
             
         },
         complete: function (data) {
-            // $('#form_domain').attr('action',beforeAction)
+            // $(formId).attr('action',beforeAction)
         },
         statusCode: {
             200: function (response) {
-                let domain = response.data
-                $('#domain-name').val(domain.name).attr('data-id',id)
-                $('#select2Icons-language_id').val(domain.language_id).trigger("change")
-                $('#domain_extension_id').val(domain.domain_extension_id).trigger("change")
-                $('#bs-datepicker-autoclose').val(domain.date_of_registration)
-                $('#multicol-year_of_extended').val(domain.year_of_extended)
-                $('#multicol-place_registration').val(domain.place_registration)
-                $('#domain_order').val(domain.order)
-                $('#multicol-content').text(domain.content)
-                $('#switch-publish-'+domain.publish).prop("checked", true)
-                $('#switch-status-'+domain.status).prop("checked", true)
-                // console.log(response);
-                $("#domainModal").modal("show");
-                $('#domainModal').on('hidden.bs.modal', function (e) {
-                    $('#form_domain').attr('action',beforeAction)
+                let data = response.data.data
+                console.log(data);
+                if (response.data.type==='domainExtension') {
+                    $('#domain_extension_name').val(data.name).attr('data-id',id)
+                    $('#domain_extension_description').text(data.description)
+                    $('#domain_extension_order').val(data.order)
+                    $('#domain_extension_publish').prop("checked", data.publish ? true : false)
+                    $('#btn_form_domain_extension').html('Chỉnh sửa')
+                } else {
+                    $('#btn_form_domain').html('Chỉnh sửa')
+                    $('#domain-name').val(data.name).attr('data-id',id)
+                    $('#select2Icons-language_id').val(data.language_id).trigger("change")
+                    $('#domain_extension_id').val(data.domain_extension_id).trigger("change")
+                    $('#bs-datepicker-autoclose').val(data.date_of_registration)
+                    $('#multicol-year_of_extended').val(data.year_of_extended)
+                    $('#multicol-place_registration').val(data.place_registration)
+                    $('#domain_order').val(data.order)
+                    $('#multicol-content').text(data.content)
+                    $('#switch-publish-'+data.publish).prop("checked", true)
+                    $('#switch-status-'+data.status).prop("checked", true)
+                }
+                
+                $(elModal).modal("show");
+                $(elModal).on('hidden.bs.modal', function (e) {
+                    if (response.data.type==='domainExtension') {
+                        $('#btn_form_domain_extension').html('Thêm mới')
+                    }else{
+                        $('#btn_form_domain').html('Thêm mới')
+                    }
+                    $(formId).attr('action',beforeAction)
                 })
             },
             201: function (response) {

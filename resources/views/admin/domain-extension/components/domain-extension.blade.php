@@ -10,10 +10,11 @@
             <form  id="form_domain_extension" class="browser-default-validation" method="POST" action="{{ route('admin.domain.extension.store') }}">
                 <div class="modal-body p-0">
                     @csrf
+                    <input type="hidden" name="extension" value="1">
                     <div class="onboarding-content mb-0 ">
                         <div class="mb-6">
                             <label for="domain_extension_name" class="form-label">{{ __('messages.domain_extension.fields.name') }}</label>
-                            <input type="text" name="domain_extension_name" class="form-control form-control-lg" id="domain_extension_name" placeholder="Enter {{ __('messages.domain_extension.fields.name') }}" />
+                            <input type="text" name="domain_extension_name" class="form-control form-control-lg" id="domain_extension_name" placeholder="Enter {{ __('messages.domain_extension.fields.name') }}" data-url="{{ route('admin.request.dotDomain') }}" data-id="" />
                           </div>
 
                             <div class="mb-6">

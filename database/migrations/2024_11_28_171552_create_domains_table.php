@@ -21,7 +21,9 @@ return new class extends Migration
             $table->date('expiry_date')->comment('Ngày hết hạn')->nullable();
             $table->integer('year_of_extended')->comment('Số năm gia hạn')->nullable();
             $table->text('content')->nullable();
+            $table->string('place_registration')->nullable()->comment('Nơi đăng ký');
             $table->tinyInteger('publish')->default(1);
+            $table->tinyInteger('status')->default(1);
             $table->float('order')->default(0)->nullable();
             $table->bigInteger('userCreated');
             $table->bigInteger('userUpdated')->nullable();

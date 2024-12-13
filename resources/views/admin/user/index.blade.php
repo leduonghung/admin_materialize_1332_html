@@ -1,20 +1,25 @@
-@extends('backend.layout.main')
+@extends('admin.layouts.main')
 
-@section('title') {{ $data['index']['title'] }} @endsection
+@section('title') {{ $data['index'] }} @endsection
 
 @section('styles')
     @parent
 @endsection
 
 @section('content')
-   
+<div class="container-xxl flex-grow-1 container-p-y">
+    @include('admin.user.components.list',['users'=>$data['users']])
+</div>
+<div class="bottom-fix">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#onboardImageModal"> Thêm mới </button>
+</div>
+{{-- @include('admin.user.components.domain-extension') --}}
     
     
 @endsection
 
 @section('adminJs')
     @parent
-@endsection
 @if(Session::has('code'))
 <script>
     $.toast({
@@ -29,3 +34,5 @@
     
     </script>
 @endif
+
+@endsection

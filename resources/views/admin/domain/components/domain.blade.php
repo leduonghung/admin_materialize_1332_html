@@ -5,7 +5,7 @@
           <h4 class="modal-title text-center" style="width: 80%;">Thêm mới Domain</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form  id="form_domain" class="needs-validation" method="POST" action="{{ route('admin.domain.store') }}">
+        <form id="form_domain" class="needs-validation" method="POST" action="{{ route('admin.domain.store') }}">
             @csrf
         <div class="modal-body">
           
@@ -110,7 +110,7 @@
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
             Close
           </button>
-          <button type="submit" class="btn btn-primary">Thêm mới</button>
+          <button type="submit" class="btn btn-primary" id="btn_form_domain">Thêm mới</button>
         </div>
         
         </form>

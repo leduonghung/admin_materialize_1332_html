@@ -9,11 +9,11 @@
                 @foreach (__('sidebar') as $val)
                 <li class="menu-item @if (in_array($segment, $val['name'])) active @endif">
                         {{-- @dd(array_key_exists('route',$val)) --}}
-                        <a href="{{ array_key_exists("route",$val) && Route::has($val['route']) ? route($val['route']) : 'javascript:void(0)' }}" class="menu-link {{ array_key_exists("route",$val) && Route::has($val['route']) ? 'menu-toggle' : null }}">
-                            <i class="menu-icon tf-icons ri-home-smile-line"></i>
+                        <a href="{{ array_key_exists("route",$val) && Route::has($val['route']) ? route($val['route']) : 'javascript:void(0)' }}" class="menu-link {{ array_key_exists("subModule",$val) && Route::has($val['route']) ? 'menu-toggle' : null }}">
+                            <i class="menu-icon {{ $val['icon'] ?? 'tf-icons ri-home-smile-line' }}"></i>
                             <div data-i18n="Dashboards">{{ $val['title'] }}</div>
                         </a>
-                        @if ($val['subModule'] && !empty($val['subModule']))
+                        @if (array_key_exists('subModule',$val) && !empty($val['subModule']))
                             <ul class="menu-sub">
                                 @foreach ($val['subModule'] as $sub)
                                     <li class="menu-item">
@@ -30,7 +30,7 @@
                 @endforeach
             @endif
             <!-- Layouts -->
-            <li class="menu-item">
+            {{-- <li class="menu-item">
                 <a href="javascript:void(0)" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ri-layout-2-line"></i>
                     <div data-i18n="Layouts">Layouts</div>
@@ -68,7 +68,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
         </ul>
     </div>

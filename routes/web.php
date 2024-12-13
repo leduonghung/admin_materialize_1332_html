@@ -11,10 +11,9 @@ use App\Http\Controllers\DomainExtensionController;
 // Route::get('/', function () {
 //     return redirect()->route('login');
 // });
+
 Route::middleware('auth')->name('admin')->group(function () {
-    // Route::get('/', function () {
-    //     return view('admin.index');
-    // });->prefix('domain')
+    // ->prefix('domain')
     Route::controller(DomainController::class)->name('.domain')->group(function () {
         Route::get('/', 'index');
         Route::get('/create', 'create')->name('.create');
@@ -31,7 +30,7 @@ Route::middleware('auth')->name('admin')->group(function () {
         Route::get('/', 'index');
         Route::get('/create', 'create')->name('.create');
         Route::post('/store', 'store')->name('.store');
-        Route::get('/edit/{id}', 'edit')->name('.edit')->where('id', '[0-9]+');
+        Route::post('/edit/{id}', 'edit')->name('.edit')->where('id', '[0-9]+');
         Route::post('/update/{id}', 'update')->name('.update')->where('id', '[0-9]+');
         Route::post('/exists', 'exists')->name('.exists');
         Route::delete('/delete/{id}', 'destroy')->name('.delete')->where('id', '[0-9]+');
@@ -50,16 +49,16 @@ Route::middleware('auth')->name('admin')->group(function () {
         Route::post('/domain', 'domain')->name('.domain');
         Route::post('/dot-domain', 'dotDomain')->name('.dotDomain');
     });
-    // Route::middleware([
-    //     'auth:sanctum',
-    //     config('jetstream.auth_session'),
-    //     'verified',
-    // ])->group(function () {
-    //     Route::get('/dashboard', function () {
-    //         return view('dashboard');
-    //     })->name('dashboard');
-    // });
 });
+// Route::middleware([
+//     'auth:sanctum',
+//     config('jetstream.auth_session'),
+//     'verified',
+// ])->group(function () {
+//     Route::get('/dashboard', function () {
+//         return view('dashboard');
+//     })->name('dashboard');
+// });
 // Auth::routes();
 
 // Route::get('home', [HomeController::class, 'index'])->name('home'); 

@@ -1,14 +1,94 @@
 "use strict";
-$(function () {
-   
-    const dt_ajax_table = $(".datatables-ajax");
-    /* $("#example tr").click( function(event) {
-        var target = $(event.target);
-        if(!target.is(":nth-of-type(4)") {
-            $(this).toggleClass('row_selected');
+function setMessSuccess(titleS="Auto close alert!",texts = 'You clicked the button!') {
+    var timerInterval;
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: titleS,
+        // text: texts,
+        html:"<span class='badge bg-label-success rounded-pill'>"+ texts +"</span><br/>I will close in <strong></strong> seconds.",
+        timer: 2000,
+        customClass: {
+            confirmButton: "btn btn-primary waves-effect waves-light",
+        },
+        buttonsStyling: false,
+        willOpen: function () {
+            Swal.showLoading();
+            timerInterval = setInterval(function () {
+                Swal.getHtmlContainer().querySelector("strong").textContent =
+                    Swal.getTimerLeft();
+            }, 100);
+        },
+        willClose: function () {
+            clearInterval(timerInterval);
+        },
+    }).then(function (result) {
+        if (
+            // Read more about handling dismissals
+            result.dismiss === Swal.DismissReason.timer
+        ) {
+            console.log("I was closed by the timer");
         }
-    }) */
-   dt_ajax_table.dataTable({
+    });
+}
+$(function () {
+    const dt_ajax_table = $(".datatables-ajax"),
+        autoClose = document.querySelector("#auto-close");
+
+    /* if (positionTopEnd) {
+            positionTopEnd.onclick = function () {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500,
+                customClass: {
+                  confirmButton: 'btn btn-primary waves-effect waves-light'
+                },
+                buttonsStyling: false
+              });
+            };
+          } */
+
+    // Auto Closing Alert
+    /* if (autoClose) {
+        autoClose.onclick = function () {
+            var timerInterval;
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Auto close alert!",
+                html: "<span class='badge bg-label-success rounded-pill'> asidahdjadh adsa jdadjahdjkah a dạ</span><br/>I will close in <strong></strong> seconds.",
+                timer: 2000,
+                customClass: {
+                    confirmButton: "btn btn-primary waves-effect waves-light",
+                },
+                buttonsStyling: false,
+                willOpen: function () {
+                    Swal.showLoading();
+                    timerInterval = setInterval(function () {
+                        Swal.getHtmlContainer().querySelector(
+                            "strong"
+                        ).textContent = Swal.getTimerLeft();
+                    }, 100);
+                },
+                willClose: function () {
+                    clearInterval(timerInterval);
+                },
+            }).then(function (result) {
+                if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.timer
+                ) {
+                    console.log("I was closed by the timer");
+                }
+            });
+        };
+    } */
+    //// alert message save records
+
+    dt_ajax_table.dataTable({
         processing: true,
         serverSide: false,
         pagingType: "full_numbers",
@@ -19,19 +99,19 @@ $(function () {
         // },
         responsive: true,
         language: {
-            "lengthMenu": "_MENU_",
-            url: assetsPath + 'js/custom/vi.json'
+            lengthMenu: "_MENU_",
+            url: assetsPath + "js/custom/vi.json",
         },
         // language: {
-            // "lengthMenu": "Display _MENU_ records per page",
-            // "zeroRecords": "No Data Found",
-            // "info": "Total",
-            // "infoEmpty": "No records available",
-            // "infoFiltered": "(filtered from _MAX_ total records)",
-            // "info": "Hiển thị _START_ tới _END_ của _TOTAL_ bản ghi",
+        // "lengthMenu": "Display _MENU_ records per page",
+        // "zeroRecords": "No Data Found",
+        // "info": "Total",
+        // "infoEmpty": "No records available",
+        // "infoFiltered": "(filtered from _MAX_ total records)",
+        // "info": "Hiển thị _START_ tới _END_ của _TOTAL_ bản ghi",
         //     url: assetsPath + 'js/custom/vi.json'
         // },
-       
+
         columnDefs: [
             {
                 targets: 0,
@@ -39,13 +119,17 @@ $(function () {
                 render: function (data, type, full, meta) {
                     // console.log(full[2]);
                     if (type === "display") {
-                        data = '<input name="domains[]" type="checkbox" class="form-check-input" value="'+full[1]+'">';
+                        data =
+                            '<input name="domains[]" type="checkbox" class="form-check-input" value="' +
+                            full[1] +
+                            '">';
                     }
                     return data;
                 },
                 checkboxes: {
                     selectRow: true,
-                    selectAllRender: '<input name="check_all" type="checkbox" id="flowcheckall" class="form-check-input"><label>&nbsp;All</label>',
+                    selectAllRender:
+                        '<input name="check_all" type="checkbox" id="flowcheckall" class="form-check-input"><label>&nbsp;All</label>',
                 },
             },
         ],
@@ -54,13 +138,13 @@ $(function () {
             style: "multi",
             selector: 'tr:not(.selected) td'
         }, */
-        
+
         pageLength: dt_ajax_table.data("page-length") ?? 10,
         lengthMenu: [
             [10, 25, 50, -1],
             [10, 25, 50, "All"],
         ],
-        order: [[2, 'desc']],
+        order: [[2, "desc"]],
         /*ajax: {
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -77,8 +161,8 @@ $(function () {
                 previous: '<i class="ri-arrow-left-s-line"></i>',
             },
         },
-    }) 
-    
+    });
+
     /* =====================table========================= */
     const select2Icons = $(".select2-icons"),
         select2 = $(".select2");
@@ -157,15 +241,31 @@ $(function () {
             $.ajax({
                 type: "POST",
                 async: false,
-                url: "/domain/extension/exists",
+                url: element.getAttribute("data-url"),
                 data: {
+                    id: element.getAttribute("data-id"),
                     name: value,
-                    _token: $("meta[name=csrf-token]").attr("content"),
+                },
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
                 },
                 dataType: "json",
-                success: function (data) {
-                    // console.log(data);
-                    result_dot = data.code == 200 ? true : false;
+                // success: function (data) {
+                //     // console.log(data);
+                //     result_dot = data.code == 200 ? true : false;
+                // },
+                statusCode: {
+                    200: function (data, textStatus) {
+                        element.classList.add("is-valid");
+                        result_dot = true;
+                    },
+                    201: function (data, textStatus) {
+                        if (element.classList.contains("is-valid"))
+                            element.classList.remove("is-valid");
+                        result_dot = false;
+                    },
                 },
             });
             return result_dot;
@@ -212,11 +312,10 @@ $(function () {
         },
         submitHandler: function (form, event) {
             // alert("Do some stuff...");
-            // console.log($("#form_domain_extension").serialize());
             $.ajax({
-                url: "/domain/extension/store",
+                url: form.getAttribute("action"),
                 type: "POST",
-                dataType: "JSON",
+                dataType: "html",
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
                         "content"
@@ -225,12 +324,32 @@ $(function () {
                 data: $("#form_domain_extension").serializeArray(),
                 // processData: false,
                 // contentType: false,
-                success: function (data, status) {
-                    $('input[name="domain_extension_name"]').val("");
-                    $('textarea[name="description"]').text("");
-                    $('input[name="order"]').val("");
-                    $("#onboardImageModal").modal("hide");
-                    // console.log(form);
+                // success: function (data, status) {
+
+                // console.log(form);
+                // },
+                statusCode: {
+                    200: function (response, textStatus) {
+                        console.log(response);
+                        let data = response.split('{dotname}')
+                        $('input[name="domain_extension_name"]').val("");
+                        $('textarea[name="description"]').text("");
+                        $('input[name="order"]').val("");
+                        $("#domain_extension_items_list").append(data[0]);
+                        $("#onboardImageModal").modal("hide");
+                        setMessSuccess('Đuôi mở rộng thêm thành công !', 'Đuôi : '+ data[1] +' đã được thêm vào Database !')
+                    },
+                    201: function (data, textStatus) {
+                        $('input[name="domain_extension_name"]').val("");
+                        $('textarea[name="description"]').text("");
+                        $('input[name="order"]').val("");
+                        // $('#domain_extension_items_list').append(data)
+                        $("#onboardImageModal").modal("hide");
+                        setMessSuccess('Đuôi mở rộng thêm thành công !', 'Đuôi : '+ data +' đã được thêm vào Database !')
+                    },
+                    205: function (data, textStatus) {
+                        console.log(data);
+                    },
                 },
                 error: function (xhr, desc, err) {
                     console.log(xhr);
@@ -238,33 +357,6 @@ $(function () {
             });
             event.preventDefault();
         },
-        // Make sure the form is submitted to the destination defined
-        // in the "action" attribute of the form when valid
-        // submitHandler: function (form, event) {
-
-        // 	alert("Do some stuff...");
-
-        // 	event.preventDefault();
-        // 	console.log($("#form_domain_extension").serializeArray());
-        //     $.ajax({
-        //         url: '/domain/extension/store',
-        //         type: "POST",
-        //         dataType: "JSON",
-        //         data: $("#form_domain_extension").serializeArray(),
-        //         processData: false,
-        //         contentType: false,
-        //         success: function (data, status) {
-        // 			console.log(data);
-        // 		},
-        //         error: function (xhr, desc, err) {
-        //             console.log("error");
-        //         },
-        //     });
-        // form.submit();
-        // 	// $(form).ajaxSubmit();
-
-        //     // console.log(data.entries());
-        // },
     });
 
     $.validator.addMethod(
@@ -291,13 +383,13 @@ $(function () {
                 //     // result_domain = data.code == 200 ? true : false;
                 // },
                 statusCode: {
-                    200: function(data,textStatus) {
+                    200: function (data, textStatus) {
                         result_domain = true;
                     },
-                    201: function(data,textStatus) {
+                    201: function (data, textStatus) {
                         result_domain = false;
-                    }
-                }
+                    },
+                },
             });
             return result_domain;
         },
@@ -366,16 +458,15 @@ $(function () {
                 // processData: false,
                 // contentType: false,
                 success: function (response, status) {
-                    
-                    
                     $("#domainModal").modal("hide");
-                    let data = response.split('{**}')
+                    let data = response.split("{**}");
+                    // setMessSuccess('Tên miền thêm thành công !', 'Đuôi : '+ data.name +' đã được thêm vào Database !')
                     // console.log('#' + data[1]);
-                    console.log($('#' + data[1]).length > 0);
-                    if ($('#' + data[1]).length) {
-                        $('#' + data[1]).html(data[0])
+                    // console.log($("#" + data[1]).length > 0);
+                    if ($("#" + data[1]).length) {
+                        $("#" + data[1]).html(data[0]);
                     } else {
-                        $('#domain_items_list').append(data[0])
+                        $("#domain_items_list").append(data[0]);
                         console.log(data[0]);
                     }
                 },
@@ -394,16 +485,16 @@ $(function () {
         $("#select2Icons-language_id").on("change", function () {
             $("#form_domain").validate().element("#select2Icons-language_id");
         });
-        let bsDatepickerAutoclose = $('#bs-datepicker-autoclose')
+        let bsDatepickerAutoclose = $("#bs-datepicker-autoclose");
         // Auto close
         if (bsDatepickerAutoclose.length) {
             bsDatepickerAutoclose.datepicker({
-            todayHighlight: true,
-            autoclose: true,
-            format: "yyyy-mm-dd",
-            calendarWeeks: true,
-            clearBtn: true,
-            orientation: isRtl ? 'auto right' : 'auto left'
+                todayHighlight: true,
+                autoclose: true,
+                format: "yyyy-mm-dd",
+                calendarWeeks: true,
+                clearBtn: true,
+                orientation: isRtl ? "auto right" : "auto left",
             });
         }
         /* let bsDatepickerRange = $("#bs-datepicker-daterange");
@@ -483,22 +574,19 @@ $(function () {
         $("#flowcheckall").click(function () {
             // console.log(this.checked);
             if (this.checked) {
-                $('input[name="domains[]"]:not(:checked)').trigger('click');
+                $('input[name="domains[]"]:not(:checked)').trigger("click");
             } else {
                 // ('input[name=input_name]').is(':checked')
-                $('input[name="domains[]"]:checked').trigger('click');
+                $('input[name="domains[]"]:checked').trigger("click");
             }
         });
         /* check all checkbox table */
 
-
-        
-        $('#domainModal').on('hidden.bs.modal', function (e) {
+        $("#domainModal").on("hidden.bs.modal", function (e) {
             $('#form_domain input[type="text"]').val("");
             $('#form_domain input[type="number"]').val("");
-            $('#form_domain select.form-select').val(null).trigger('change');
-            $('#form_domain textarea').text("");
-        })
-
+            $("#form_domain select.form-select").val(null).trigger("change");
+            $("#form_domain textarea").text("");
+        });
     });
 });

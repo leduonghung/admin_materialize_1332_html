@@ -31,7 +31,7 @@ class RequestController extends Controller
         $id = request()->id ? ',' . request()->id : '';
         // dd($id);
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:domainextensions,name' . $id, 
+            'name' => 'required|unique:domain_extensions,name' . $id, 
         ]);
         if ($validator->passes()) {
             return response()->json([

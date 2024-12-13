@@ -36,7 +36,7 @@
                         <td>{!! $domain->isPublish() !!}</td>
                         <td>{{ $domain->created_at }}</td>
                         <td class="text-center">
-                            <a href="javascript:void(0)" data-action="{{ route('admin.domain.update', $domain->id) }}" data-url="{{ route('admin.domain.edit', $domain->id) }}" onclick="editItem(this,{{ $domain->id }})" class="btn btn-xs btn-outline-primary btn-primary waves-effect waves-light"> <span class="tf-icons ri-edit-2-fill ri-14px"></span>&nbsp; Sửa </a> &nbsp;
+                            <a href="javascript:void(0)" data-form="#form_domain" data-modal="#domainModal" data-action="{{ route('admin.domain.update', $domain->id) }}" data-url="{{ route('admin.domain.edit', $domain->id) }}" onclick="editItem(this,{{ $domain->id }})" class="btn btn-xs btn-outline-primary btn-primary waves-effect waves-light"> <span class="tf-icons ri-edit-2-fill ri-14px"></span>&nbsp; Sửa </a> &nbsp;
                             <a href="javascript:void(0)" data-url="{{ route('admin.domain.delete', $domain->id) }}" onclick="deleteItem(this,{{ $domain->id }})" class="btn btn-xs btn-outline-danger btn-danger waves-effect waves-light"> <span class="tf-icons ri-delete-bin-6-line ri-14px"></span>&nbsp; Xóa </a>
                         </td>
                     </tr>

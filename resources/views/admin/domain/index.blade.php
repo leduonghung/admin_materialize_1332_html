@@ -1,6 +1,6 @@
 @extends('admin.layouts.main')
 
-@section('title', 'Page Title')
+@section('title', $data['index'] ?? 'Page Title')
 @section('styles')
 <link rel="stylesheet" href="{{ asset('backend/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
 <link rel="stylesheet" href="{{ asset('backend/vendor\libs\datatables-checkboxes-jquery\datatables.checkboxes.css') }}" />
@@ -91,7 +91,7 @@
             <div class="border-0">
                 <div class="row g-0">
                     <!-- Email Sidebar -->
-                    @include('admin.components.sidebar')
+                    @include('admin.domain.components.sidebar')
                     <!--/ Email Sidebar -->
 
                     <!-- Emails List -->
@@ -121,7 +121,7 @@
                                     </div>
                                 </div>
 
-                                @include('admin.components.list',['domains'=>$data['domains']])
+                                @include('admin.domain.components.list',['domains'=>$data['domains']])
                             </div>
                             <hr class="container-m-nx m-0" />
                             <!-- Email List: Items -->
@@ -265,22 +265,13 @@
             TLD </button>
     </div>
 
-    @include('admin.components.domain')
-    @include('admin.components.domain-extension')
+    @include('admin.domain.components.domain')
+    @include('admin.domain.components.domain-extension')
 
 @endsection
 
 @section('scripts')
-    
     <script src="{{ asset('backend/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
-    
-
-
-{{-- <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js') }}"></script> --}}
-{{-- <script src="{{ asset('https://cdn.datatables.net/2.1.8/js/dataTables.js') }}"></script> --}}
-{{-- <script src="{{ asset('https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js') }}"></script> --}}
-
-    
     <script src="{{ asset('backend/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('backend/js/jquery/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/libs/moment/moment.js') }}"></script>
@@ -291,7 +282,6 @@
     <script src="{{ asset('backend/vendor/libs/pickr/pickr.js') }}"></script>
     <script src="{{ asset('backend/js/ui-popover.js') }}"></script>
     <script src="{{ asset('backend/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
-    {{-- <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.14.5/sweetalert2.min.js') }}"></script> --}}
     @parent
     <script src="{{ asset('backend/js/global.js') }}"></script>
     {{-- <script src="{{ asset('backend/js/forms-pickers.js') }}"></script> --}}

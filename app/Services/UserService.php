@@ -15,11 +15,11 @@ use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 class UserService extends BaseService implements UserServiceInterface 
 {
     protected $userRepository;
-    protected $language;
+    // protected $language;
 
     public function __construct(UserRepository $userRepository) {
         $this->userRepository = $userRepository;
-        $this->language = $this->currentLanguage();
+        // $this->language = $this->currentLanguage();
     }
 
     public function paginate($request,$softDeletes=false) {
@@ -47,7 +47,7 @@ class UserService extends BaseService implements UserServiceInterface
         return $this->userRepository->getAll();
     }
     private function paginateSelect() {
-        return ['id', 'name', 'email', 'phone', 'address', 'publish','deleted_at'];
+        return ['id', 'name', 'email', 'phone', 'address', 'publish','deleted_at','updated_at'];
     }
 
     public function create($request){

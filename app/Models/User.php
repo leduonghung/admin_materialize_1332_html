@@ -15,12 +15,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory,SoftDeletes;
+    use HasApiTokens,QueryScopes,SoftDeletes;
+
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory;
     use HasProfilePhoto;
+    use HasTeams;
     use Notifiable;
-    use TwoFactorAuthenticatable,QueryScopes;
-    protected $softDelete = true;
+    use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -28,23 +30,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'profile_photo_path',
-        'password',
-        'phone',
-        'province_id',
-        'district_id',
-        'ward_id',
-        'address',
-        'birthday',
-        'description',
-        'user_agent',
-        'ip',
-        'image',
-        'publish',
-        'userCreated',
+        'name', 'isAdmin', 'status', 'email', 'profile_photo_path', 'password', 'api_token', 'description', 'userCreated', 'userUpdated', 'isManager',
     ];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -80,32 +68,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function isActive()
+    public function isPublish()
     {
         return ($this->publish) ? 'Kích hoạt' : ' &nbsp; Ẩn &nbsp; ';
     }
-
-    // public function roles() {
-    //     return $this->belongsToMany(Role::class, 'role_users','user_id', 'role_id')
-
-    //     ->select(['roles.id', 'roles.name', 'roles.publish'])->withTimestamps();
-    // }
-
-    // public function checkPermissionAccess($permissionCheck) : bool {
-    //     $roles = auth()->user()->roles;
-    //     $roles->contains(function ($role) {
-    //         if(in_array(strtolower($role->name),['admin','developer'])) return true;
-    //         // dd($value);
-    //     });
-
-    //     // dd($roles);
-    //     foreach ($roles as $role) {
-    //         $permissions = $role->permissions;
-    //         // dd($permissions->toArray());
-    //         if($permissions->contains('key_code', $permissionCheck)){
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
 }

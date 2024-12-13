@@ -22,8 +22,10 @@ class DomainExtension extends Model
         'userUpdated'
     ];
 
-    public function isActive()
+    public function isPublish()
     {
         return ($this->publish) ? 'Kích hoạt' : ' &nbsp; Ẩn &nbsp; ';
     }
+
+    
 }

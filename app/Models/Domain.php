@@ -25,11 +25,8 @@ class Domain extends Model
         'order',
         'userCreated',
         'userUpdated',
-        'created_at',
-        'updated_at',
-        'deleted_at',
     ];
-
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     public function isPublish()
     {
         return __('messages.domain.publish')[$this->publish];

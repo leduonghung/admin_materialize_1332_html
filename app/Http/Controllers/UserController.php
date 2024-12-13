@@ -27,10 +27,10 @@ class UserController extends Controller
     public function index(UserRepository $user,Request $request)
     {
         try {
-            $data = config('apps.user');
+            $data = __('messages.user');
             $data['users']= $this->userService->paginate($request);
             $data['softDeletes']= $this->userService->paginate($request,true);
-            dd($data);
+            // dd($data);
             return view('admin.user.index', compact('data'));//->with(['code'=>'success','title'=>'asdada','content'=>'Thêm bản ghi thành công !']);
         } catch (\Exception $e) {
             throw $e;

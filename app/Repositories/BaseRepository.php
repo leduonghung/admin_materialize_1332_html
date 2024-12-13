@@ -77,12 +77,26 @@ abstract class BaseRepository implements BaseRepositoryInterface
         if(!empty($conditions)){
             // $query->whereIn($condition['whereIn'] ?? null);
             foreach ($conditions as $key => $val) {
-                if ($key === 'whereIn') {
-                    $query->customWhereIn($conditions['whereIn'] ?? null);
-                } else {
+                switch ($key) {
+                    case 'whereIn':
+                        $query->customWhereIn($conditions['whereIn'] ?? null);
+                        break;
+                    case 'whereNull':
+                        $query->whereNull($conditions['whereNull'] ?? null);
+                        break;
+                    
+                    default:
                     $query->where($val[0],$val[1],$val[2]);
+                        break;
                 }
+                // if ($key === 'whereIn') {
+                //     $query->customWhereIn($conditions['whereIn'] ?? null);
+                // } else {
+                //     $query->where($val[0],$val[1],$val[2]);
+                // }
                 // $query->where($val[0],$val[1],$val[2]);
+
+                // ->whereNull('deleted_at')
             }
         }
         if(!empty($joins)){
@@ -102,7 +116,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
             }
         }
         // dd($query->toSql());
-        return $flag ? $query->whereNull('deleted_at')->get() : $query->whereNull('deleted_at')->first();
+        return $flag ? $query->get() : $query->first();
     }
 
     public function findByCondition(array $condition = [], array $relation = [], bool $flag = false, array $orderBy = [])
